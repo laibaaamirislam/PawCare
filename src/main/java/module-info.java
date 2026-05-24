@@ -1,6 +1,5 @@
 module com.example.pawcare {
     requires javafx.controls;
-    requires javafx.fxml;
     requires javafx.web;
 
     requires org.controlsfx.controls;
@@ -11,6 +10,5 @@ module com.example.pawcare {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
 
-    opens com.example.pawcare to javafx.fxml;
-    exports com.example.pawcare;
+    exports com.example.pawcare.ui;
 }
