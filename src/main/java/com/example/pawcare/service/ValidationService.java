@@ -5,7 +5,8 @@ import com.example.pawcare.model.Customer;
 import java.util.Optional;
 
 public class ValidationService {
-    private static final String EMAIL_PATTERN = "^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$";
+    private static final String EMAIL_PATTERN =
+            "^[A-Za-z0-9]+([._%+-][A-Za-z0-9]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*\\.[A-Za-z]{2,}$";
     private static final String PHONE_PATTERN = "^[0-9]{7,15}$";
 
     private final CustomerStorageService storageService;

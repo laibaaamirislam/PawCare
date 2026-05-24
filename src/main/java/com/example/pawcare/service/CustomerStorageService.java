@@ -160,7 +160,7 @@ public class CustomerStorageService {
             return;
         }
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
-        Path backupPath = Path.of(dataFile + ".corrupt-" + timestamp);
+        Path backupPath = dataFile.resolveSibling(dataFile.getFileName().toString() + ".corrupt-" + timestamp);
         try {
             moveFile(dataFile, backupPath);
         } catch (Exception ignored) {

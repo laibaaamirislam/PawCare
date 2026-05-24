@@ -24,12 +24,14 @@ public final class ImageLoader {
         if (resourcePath == null || resourcePath.isBlank()) {
             return null;
         }
-        InputStream stream = ImageLoader.class.getResourceAsStream(resourcePath.startsWith("/")
-                ? resourcePath
-                : "/" + resourcePath);
-        if (stream == null) {
+        String resolvedPath = resourcePath.startsWith("/") ? resourcePath : "/" + resourcePath;
+        try (InputStream stream = ImageLoader.class.getResourceAsStream(resolvedPath)) {
+            if (stream == null) {
+                return null;
+            }
+            return new Image(stream);
+        } catch (Exception ex) {
             return null;
         }
-        return new Image(stream);
     }
 }
