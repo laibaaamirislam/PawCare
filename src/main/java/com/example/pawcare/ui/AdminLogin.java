@@ -1,5 +1,6 @@
 package com.example.pawcare.ui;
 
+import com.example.pawcare.util.DialogUtils;
 import com.example.pawcare.util.ImageLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -29,17 +30,17 @@ public class AdminLogin {
         Button button1 = new Button("ADMIN");
         button1.setMaxWidth(250);
         button1.setStyle("-fx-background-color: pink; -fx-border-radius: 50;");
-        button1.setOnAction(event -> showRoleLogin());
+        button1.setOnAction(event -> showRoleLogin("Admin"));
 
         Button button2 = new Button("VET");
         button2.setMaxWidth(250);
         button2.setStyle("-fx-background-color: pink; -fx-border-radius: 50;");
-        button2.setOnAction(event -> showRoleLogin());
+        button2.setOnAction(event -> showRoleLogin("Vet"));
 
         Button button3 = new Button("EMPLOYEE");
         button3.setMaxWidth(250);
         button3.setStyle("-fx-background-color: pink; -fx-border-radius: 50;");
-        button3.setOnAction(event -> showRoleLogin());
+        button3.setOnAction(event -> showRoleLogin("Employee"));
         adminVBox.getChildren().addAll(welcomeTextAdmin, button1, button2, button3);
         stage.setTitle("PawCare Pet store");
         stage.getIcons().add(ImageLoader.load("/pawIcon.jpeg"));
@@ -49,7 +50,7 @@ public class AdminLogin {
         stage.show();
     }
 
-    private void showRoleLogin() {
+    private void showRoleLogin(String role) {
         Stage adminLoginStage = new Stage();
         GridPane adminLoginPane = new GridPane();
         adminLoginPane.setAlignment(Pos.CENTER);
@@ -81,9 +82,8 @@ public class AdminLogin {
         Button adminLoginButton = new Button("Login");
         adminLoginButton.setMaxWidth(150);
         adminLoginButton.setStyle("-fx-background-color: pink; -fx-border-color: pink; -fx-border-radius: 50;");
-        adminLoginButton.setOnAction(loginEvent -> {
-
-        });
+        adminLoginButton.setOnAction(loginEvent ->
+                DialogUtils.showMessage(role + " login is not configured yet."));
 
         adminLoginPane.add(adminLoginText, 0, 0);
         adminLoginPane.add(adminUsernameLabel, 0, 1);

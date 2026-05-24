@@ -165,11 +165,11 @@ public class SignUpScreen {
                 String confirmPassword = validationService.normalize(passwordFieldSignup2.getText());
 
                 if (!validationService.isValidPassword(password)) {
-                    alertPasswordLabel.setText("password must be 5-8 characters long.");
+                    alertPasswordLabel.setText("Password must be 5-8 characters long.");
                     return;
                 }
                 if (!password.equals(confirmPassword)) {
-                    alertPasswordLabel.setText("passwords are not same");
+                    alertPasswordLabel.setText("Passwords do not match.");
                     return;
                 }
 

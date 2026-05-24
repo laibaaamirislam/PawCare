@@ -1,5 +1,6 @@
 package com.example.pawcare.ui;
 
+import com.example.pawcare.service.CustomerStorageService;
 import com.example.pawcare.service.ValidationService;
 import com.example.pawcare.util.DialogUtils;
 import com.example.pawcare.util.ImageLoader;
@@ -20,6 +21,7 @@ import javafx.stage.Stage;
 
 public class CustomerInterface {
     private final ValidationService validationService = ValidationService.defaultService();
+    private final CustomerStorageService storageService = CustomerStorageService.defaultStorage();
 
     public void show(Stage stage, String loginUsername, String loginPassword) {
         String username = validationService.normalize(loginUsername);
@@ -91,7 +93,7 @@ public class CustomerInterface {
         petStore.setStyle("-fx-background-color: HOTPINK; -fx-background-radius: 20; -fx-border-color: FLORALWHITE");
 
         Button orderHistory = new Button();
-        orderHistory.setText(" My Orders");
+        orderHistory.setText("My Orders");
         orderHistory.setFont(new Font("Ink Free", 25));
         orderHistory.setTextFill(Color.WHITE);
         orderHistory.setPrefWidth(175);
@@ -144,13 +146,17 @@ public class CustomerInterface {
             editProfile.setStyle("-fx-background-color: HOTPINK; -fx-background-radius: 20; -fx-border-color: FLORALWHITE");
 
             Button signOut = new Button();
-            signOut.setText("signOut");
+            signOut.setText("Sign Out");
             signOut.setFont(new Font("Ink Free", 20));
             signOut.setTextFill(Color.WHITE);
             signOut.setPrefWidth(155);
             signOut.setPrefHeight(75);
             signOut.setStyle("-fx-background-color: HOTPINK; -fx-background-radius: 20; -fx-border-color: FLORALWHITE");
-            signOut.setOnAction(e4 -> DialogUtils.showMessage("You have been signed out successfully."));
+            signOut.setOnAction(e4 -> {
+                settingsStage.close();
+                customerInterface.close();
+                DialogUtils.showMessage("You have been signed out successfully.");
+            });
 
             Button deleteProfile = new Button();
             deleteProfile.setText("Delete Account");
@@ -159,12 +165,20 @@ public class CustomerInterface {
             deleteProfile.setPrefWidth(155);
             deleteProfile.setPrefHeight(75);
             deleteProfile.setStyle("-fx-background-color: HOTPINK; -fx-background-radius: 20; -fx-border-color: FLORALWHITE");
-            deleteProfile.setOnAction(e4 -> DialogUtils.showMessage("You account has been deleted successfully."));
+            deleteProfile.setOnAction(e4 -> {
+                if (storageService.deleteByUsername(username)) {
+                    settingsStage.close();
+                    customerInterface.close();
+                    DialogUtils.showMessage("Your account has been deleted successfully.");
+                } else {
+                    DialogUtils.showMessage("Unable to delete account. Please try again.");
+                }
+            });
 
             settingsvbox.setSpacing(20);
             settingsvbox.getChildren().addAll(welcomeVbox, setimageView, editProfile, signOut, deleteProfile);
             Scene settingsScene = new Scene(settingsvbox, 500, 600, Color.FLORALWHITE);
-            settingsStage.setTitle("pawCare Pet Store");
+            settingsStage.setTitle("PawCare Pet Store");
             settingsStage.getIcons().add(ImageLoader.load("/pawIcon.jpeg"));
             settingsStage.setScene(settingsScene);
             settingsStage.show();

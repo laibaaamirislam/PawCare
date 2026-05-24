@@ -33,8 +33,17 @@ public class CustomerStorageService {
 
         try (ObjectInputStream ois = new ObjectInputStream(Files.newInputStream(dataFile))) {
             Object result = ois.readObject();
-            if (result instanceof List) {
-                return new ArrayList<>((List<Customer>) result);
+            if (result instanceof List<?> list) {
+                List<Customer> customers = new ArrayList<>();
+                for (Object item : list) {
+                    if (item instanceof Customer customer) {
+                        customers.add(customer);
+                    } else {
+                        backupCorruptFile();
+                        return new ArrayList<>();
+                    }
+                }
+                return customers;
             }
         } catch (IOException | ClassNotFoundException ex) {
             backupCorruptFile();
@@ -119,6 +128,23 @@ public class CustomerStorageService {
             }
         }
         return updated && saveCustomers(updatedCustomers);
+    }
+
+    public boolean deleteByUsername(String username) {
+        if (username == null) {
+            return false;
+        }
+        List<Customer> customers = loadCustomers();
+        List<Customer> updatedCustomers = new ArrayList<>();
+        boolean removed = false;
+        for (Customer customer : customers) {
+            if (username.equalsIgnoreCase(customer.getUsername())) {
+                removed = true;
+            } else {
+                updatedCustomers.add(customer);
+            }
+        }
+        return removed && saveCustomers(updatedCustomers);
     }
 
     private boolean isEmpty(Path file) {
